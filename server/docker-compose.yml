@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  server:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - /path/to/your/music:/music:ro
+      - music-data:/data
+    environment:
+      API_KEY: "your-secret-key"
+      LISTEN_ADDR: ":8080"
+      MUSIC_DIR: "/music"
+      DB_PATH: "/data/music.db"
+      ARTWORK_DIR: "/data/artwork"
+
+volumes:
+  music-data:
