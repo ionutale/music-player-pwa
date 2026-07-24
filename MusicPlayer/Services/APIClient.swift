@@ -55,11 +55,11 @@ actor APIClient {
         try await get("/api/stats")
     }
 
-    func artworkURL(for albumId: Int64) -> URL {
+    nonisolated func artworkURL(for albumId: Int64) -> URL {
         baseURL.appendingPathComponent("/api/artwork/\(albumId)")
     }
 
-    func streamURL(for songId: Int64) -> URL {
+    nonisolated func streamURL(for songId: Int64) -> URL {
         baseURL.appendingPathComponent("/api/stream/\(songId)")
     }
 

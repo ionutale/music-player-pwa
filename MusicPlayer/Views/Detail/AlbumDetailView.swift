@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AlbumDetailView: View {
     let albumId: Int64
-    @StateObject var apiClient: APIClient
+    let apiClient: APIClient
     @StateObject var audioPlayer: AudioPlayer
     @StateObject var downloadManager: DownloadManager
 

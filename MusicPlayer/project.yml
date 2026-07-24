@@ -13,7 +13,11 @@ targets:
     type: application
     platform: iOS
     sources:
-      - path: .
+      - path: MusicPlayerApp.swift
+      - Models
+      - Services
+      - Views
+      - CarPlay
     settings:
       base:
         INFOPLIST_FILE: Info.plist
@@ -40,7 +44,6 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.yourname.musicplayer.tests
-        INFOPLIST_FILE: ""
         SWIFT_VERSION: "5.9"
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MusicPlayer.app/MusicPlayer"
@@ -55,7 +58,6 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.yourname.musicplayer.uitests
-        INFOPLIST_FILE: ""
         SWIFT_VERSION: "5.9"
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
         TEST_TARGET_NAME: MusicPlayer

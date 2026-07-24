@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var apiClient: APIClient
+    let apiClient: APIClient
     @StateObject var audioPlayer: AudioPlayer
     @StateObject var downloadManager: DownloadManager
     @StateObject var searchEngine: SearchEngine
