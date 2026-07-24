@@ -29,3 +29,27 @@ targets:
         enabled: true
     info:
       path: Info.plist
+
+  MusicPlayerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - MusicPlayerTests
+    dependencies:
+      - target: MusicPlayer
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourname.musicplayer.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MusicPlayer.app/MusicPlayer"
+
+  MusicPlayerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - MusicPlayerUITests
+    dependencies:
+      - target: MusicPlayer
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourname.musicplayer.uitests
+        TEST_TARGET_NAME: MusicPlayer

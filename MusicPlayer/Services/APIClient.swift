@@ -2,16 +2,20 @@ import Foundation
 
 actor APIClient {
     let baseURL: URL
-    private let session: URLSession
-    private let apiKey: String
+    let session: URLSession
+    let apiKey: String
 
-    init(baseURL: URL, apiKey: String) {
+    init(baseURL: URL, apiKey: String, session: URLSession? = nil) {
         self.baseURL = baseURL
         self.apiKey = apiKey
-        let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = 30
-        config.timeoutIntervalForResource = 300
-        self.session = URLSession(configuration: config)
+        if let session {
+            self.session = session
+        } else {
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 30
+            config.timeoutIntervalForResource = 300
+            self.session = URLSession(configuration: config)
+        }
     }
 
     private var defaultHeaders: [String: String] {
