@@ -56,15 +56,15 @@ actor APIClient {
     }
 
     nonisolated func artworkURL(for albumId: Int64) -> URL {
-        baseURL.appendingPathComponent("/api/artwork/\(albumId)")
+        URL(string: "/api/artwork/\(albumId)", relativeTo: baseURL)!
     }
 
     nonisolated func streamURL(for songId: Int64) -> URL {
-        baseURL.appendingPathComponent("/api/stream/\(songId)")
+        URL(string: "/api/stream/\(songId)", relativeTo: baseURL)!
     }
 
     func triggerScan() async throws -> [String: String] {
-        var req = URLRequest(url: baseURL.appendingPathComponent("/api/scan"))
+        var req = URLRequest(url: URL(string: "/api/scan", relativeTo: baseURL)!)
         req.httpMethod = "POST"
         req.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
         let (data, _) = try await session.data(for: req)
@@ -72,7 +72,7 @@ actor APIClient {
     }
 
     private func get<T: Decodable>(_ path: String) async throws -> T {
-        var req = URLRequest(url: baseURL.appendingPathComponent(path))
+        var req = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         req.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
         let (data, _) = try await session.data(for: req)
         return try JSONDecoder().decode(T.self, from: data)

@@ -2,14 +2,17 @@ import SwiftUI
 
 @main
 struct MusicPlayerApp: App {
-    @State private var isConfigured = UserDefaults.standard.string(forKey: "serverURL") != nil
-    @State private var serverURL = UserDefaults.standard.string(forKey: "serverURL") ?? ""
-    @State private var apiKey = UserDefaults.standard.string(forKey: "apiKey") ?? ""
+    @AppStorage("serverURL") private var serverURL = ""
+    @AppStorage("apiKey") private var apiKey = ""
+
+    private var isConfigured: Bool {
+        !serverURL.isEmpty && !apiKey.isEmpty && URL(string: serverURL) != nil
+    }
 
     var body: some Scene {
         WindowGroup {
-            if isConfigured {
-                let client = APIClient(baseURL: URL(string: serverURL)!, apiKey: apiKey)
+            if isConfigured, let url = URL(string: serverURL) {
+                let client = APIClient(baseURL: url, apiKey: apiKey)
                 ContentView(
                     apiClient: client,
                     audioPlayer: AudioPlayer(apiClient: client),
@@ -24,14 +27,20 @@ struct MusicPlayerApp: App {
 }
 
 struct SetupView: View {
-    @State private var serverURL = ""
-    @State private var apiKey = ""
+    @AppStorage("serverURL") private var serverURL = ""
+    @AppStorage("apiKey") private var apiKey = ""
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Server Connection") {
-                    TextField("Server URL", text: $serverURL)
+                Section {
+                    Text("Enter your server details to connect to your music library.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
+                Section("Server") {
+                    TextField("http://192.168.1.100:8080", text: $serverURL)
                         .textContentType(.URL)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
@@ -39,17 +48,25 @@ struct SetupView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                 }
+
                 Section {
-                    Button("Connect") {
-                        UserDefaults.standard.set(serverURL, forKey: "serverURL")
-                        UserDefaults.standard.set(apiKey, forKey: "apiKey")
-                        NotificationCenter.default.post(name: NSNotification.Name("ServerConfigured"), object: nil)
+                    Button("Connect") {}
+                        .disabled(serverURL.isEmpty || apiKey.isEmpty)
+                }
+
+                Section("How to find your server") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("1. Make sure the Docker server is running")
+                        Text("2. Find your server's local IP:")
+                        Text("   macOS: System Settings → Network")
+                        Text("   Then: http://<IP>:8080")
+                        Text("3. Use the API_KEY from docker-compose.yml")
                     }
-                    .disabled(serverURL.isEmpty || apiKey.isEmpty)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 }
             }
-            .navigationTitle("Welcome")
-            .interactiveDismissDisabled()
+            .navigationTitle("Connect to Server")
         }
     }
 }
